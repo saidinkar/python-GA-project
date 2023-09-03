@@ -1,22 +1,12 @@
-#This is the base image for this Dockerfile
-FROM python:3-alpine3.15
+FROM python:3.11-slim
+ENV PORT 8000
+EXPOSE 8000
+WORKDIR /usr/src/app
 
-LABEL BuildBy="Dinkar Gedela"
-LABEL BuilderEmail="dgedela@archinsurance.com"
+COPY requirements.txt ./
+RUN pip install --no-cache-dir -r requirements.txt
 
-#Set the working directory in the container
-WORKDIR /app
-COPY . /app
+COPY . .
 
-#Copy the requirements file into the container
-COPY requirements.txt .
-
-#install the dependencies from requirements.txt
-RUN pip install -r requirements.txt
-
-#Open the port on which Flask app will run
-EXPOSE 8080
-
-#commands to run the Flask app
-ENTRYPOINT [ "python" ]
-CMD [ "/src/app.py" ]
+ENTRYPOINT ["python"]
+CMD ["app.py"]
